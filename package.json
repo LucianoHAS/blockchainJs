@@ -1,0 +1,23 @@
+{
+  "name": "blockchainJs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucianoHAS/blockchainJs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucianoHAS/blockchainJs/issues"
+  },
+  "homepage": "https://github.com/LucianoHAS/blockchainJs#readme",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
+}
