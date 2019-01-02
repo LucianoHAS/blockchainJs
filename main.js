@@ -7,10 +7,20 @@ class Block {
         this.data = data;
         this.previousHash = previousHash;
         this.hash = this.calculateHash();
+        this.nonce = 0;
     };
 
     calculateHash() {
-        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data)).toString();
+        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nonce).toString();
+    };
+
+    mineBlock(difficulty) {
+        while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')) {
+            this.nonce++;
+            this.hash = this.calculateHash();
+        };
+
+        console.log('Block mined: ' + this.hash);
     };
 };
 
@@ -18,6 +28,7 @@ class Block {
 class BlockChain {
     constructor() {
         this.chain = [this.createGenesisBlock()];
+        this.difficulty = 4;
     };
 
     createGenesisBlock() {
@@ -30,7 +41,7 @@ class BlockChain {
 
     addBlock(newBlock) {
         newBlock.previousHash = this.getLatestBlock().hash;
-        newBlock.hash = newBlock.calculateHash();
+        newBlock.mineBlock(this.difficulty);
         this.chain.push(newBlock);
     };
 
@@ -54,26 +65,11 @@ class BlockChain {
 // Teste
 let coin = new BlockChain();
 
-// Inclusão de novos blocos
+console.log('Minerando bloco 1...');
 coin.addBlock(new Block(1, '02/01/2019', { saldo: 10 }));
+
+console.log('Minerando bloco 2...');
 coin.addBlock(new Block(1, '03/01/2019', { saldo: 40 }));
-console.log('Is block chain valid? ' + coin.isChainValid());
-
-// Alteração do valor de um bloco depois de incluído
-coin.chain[1].data = { saldo: 200 };
-console.log('Is block chain valid? ' + coin.isChainValid());
-
-// Recalculo do hash depois de alterado o valor do bloco
-coin.chain[1].hash = coin.chain[1].calculateHash();
-console.log('Is block chain valid? ' + coin.isChainValid());
-
-// Alteração do bloco para o valor original
-coin.chain[1].data = { saldo: 10 };
-console.log('Is block chain valid? ' + coin.isChainValid());
-
-// Recalculo do hash depois de voltar o bloco para o valor original
-coin.chain[1].hash = coin.chain[1].calculateHash();
-console.log('Is block chain valid? ' + coin.isChainValid());
 
 // Lista todos os blocos
 console.log(JSON.stringify(coin, null, 4));
